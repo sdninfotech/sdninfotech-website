@@ -18,6 +18,11 @@
             color: white;
             padding: 1em 0;
             text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            left: 0;
+            z-index: 1000;
         }
         nav ul {
             list-style: none;
@@ -31,10 +36,21 @@
             color: white;
             text-decoration: none;
             font-weight: bold;
+            transition: color 0.3s;
+        }
+        nav ul li a:hover {
+            color: #ffcc00;
         }
         section {
-            padding: 20px;
+            padding: 80px 20px 20px;
             text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         footer {
             background: #333;
@@ -89,5 +105,25 @@
     <footer>
         <p>&copy; 2025 SDN Infotech Pvt Ltd. All rights reserved.</p>
     </footer>
+    
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            let sections = document.querySelectorAll("section");
+            let options = {
+                threshold: 0.3
+            };
+            let observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("visible");
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, options);
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
 </body>
 </html>
